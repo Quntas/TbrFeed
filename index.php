@@ -137,6 +137,9 @@
         あと、 <a href="https://twitter.com/intent/tweet?button_hashtag=tbrfeed" class="twlink">#tbrfeed</a> タグをつけてツイートすれば見たり見なかったりします。
       </p>
 
+      <h2>オープンソースプロジェクト</h2>
+      <p>ソースコードを<a href="https://github.com/azyobuzin/TbrFeed">GitHub</a>で公開しています。</p>
+
       <h2>使用ライブラリ</h2>
       <p>TbrFeedは、PythonとPHPを用いて開発されており、以下の外部ライブラリを使用しています。</p>
       <ul>

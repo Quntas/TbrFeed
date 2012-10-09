@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="style.css">
     <meta name="keywords" content="Tumblr,フィード,RSS">
     <meta name="description" content="TbrFeedはTumblrのダッシュボードをRSSに変換するWebサービスです。">
-    <meta name="author" content="azyobuzin">
+    <meta name="author" content="http://twitter.com/azyobuzin">
     <meta itemprop="applicationCategory" content="Social">
     <meta itemprop="inLanguage" content="ja-JP">
     <meta property="og:title" content="TbrFeed" />

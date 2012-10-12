@@ -4,25 +4,38 @@
 import cgitb
 cgitb.enable()
 
-import tbrfeed
-import os
-import cgi
 import MySQLdb
-import urlparse
 
-form = cgi.FieldStorage()
+import session
+from tbrfeed import *
 
-if form.has_key("id"):
-	db = MySQLdb.connect(user=tbrfeed.dbName, passwd=tbrfeed.dbPassword, db=tbrfeed.dbName, charset="utf8")
-	c = db.cursor()
-	
-	c.execute("DELETE FROM %s WHERE digest = %s"
-		% (tbrfeed.usersTable, db.literal(form["id"].value))
-	)
-	
-	db.commit()
-	c.close()
-	db.close()
+with session.Session() as sess:
+    db = MySQLdb.connect(user = dbName, passwd = dbPassword, db = dbName, charset = "utf8")
+    c = db.cursor()
 
-print("Location: " + tbrfeed.location)
-print
+    c.execute("DELETE FROM %s WHERE id = %s"
+        % (usersTable, db.literal(sess.data["user"][0]))
+    )
+
+    db.commit()
+    c.close()
+    db.close()
+
+    del sess.data["user"]
+
+    print "Status: 303 See Other"
+    print sess.cookie
+    print "Location: " + location
+    print "Content-Type: text/html; charset=utf-8"
+    print """
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="robots" content="noindex">
+        <title>TbrFeed</title>
+    </head>
+    <body>
+        <p><a href="%s">Back to TbrFeed</a></p>
+    </body>
+</html>
+""" % location

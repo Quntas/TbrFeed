@@ -4,14 +4,25 @@
 import cgitb
 cgitb.enable()
 
-import tbrfeed
-import os
-import Cookie
+import session
+from tbrfeed import *
 
-sc = Cookie.SimpleCookie(os.environ.get("HTTP_COOKIE",""))
-if tbrfeed.cookieKey in sc:
-	sc[tbrfeed.cookieKey]["expires"] = "Tue, 1-Jan-1980 00:00:00"
+with session.Session() as sess:
+    del sess.data["user"]
 
-print(sc.output())
-print("Location: " + tbrfeed.location)
-print
+    print "Status: 303 See Other"
+    print sess.cookie
+    print "Location: " + location
+    print "Content-Type: text/html; charset=utf-8"
+    print """
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="robots" content="noindex">
+        <title>TbrFeed</title>
+    </head>
+    <body>
+        <p><a href="%s">Back to TbrFeed</a></p>
+    </body>
+</html>
+""" % location

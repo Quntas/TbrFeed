@@ -4,76 +4,73 @@
 import cgitb
 cgitb.enable()
 
-import tbrfeed
-import os
-import oauth2
-import urlparse
-import MySQLdb
-import Cookie
-import json
 import hashlib
-import datetime
+import json
+import os
+import random
+import time
+import urlparse
 
-query = dict(urlparse.parse_qsl(os.environ.get("QUERY_STRING", "")))
+import MySQLdb
+import oauth2
 
-if "oauth_token" in query and "oauth_verifier" in query:
-	oauthToken = query["oauth_token"]
-	oauthVerifier = query["oauth_verifier"]
-	
-	db = MySQLdb.connect(user=tbrfeed.dbName, passwd=tbrfeed.dbPassword, db=tbrfeed.dbName, charset="utf8")
-	c = db.cursor()
-	
-	c.execute("SELECT id, oauth_token_secret FROM %s WHERE oauth_token = %s"
-		% (tbrfeed.requestSessionTable, db.literal(oauthToken))
-	)
-	
-	sqlResult = c.fetchone()
-	token = oauth2.Token(oauthToken, sqlResult[1])
-	token.set_verifier(oauthVerifier)
-	
-	client = oauth2.Client(tbrfeed.oauthConsumer, token)
-	resp, content = client.request("http://www.tumblr.com/oauth/access_token", "POST")
-	accessToken = dict(urlparse.parse_qsl(content))
-	
-	c.execute("DELETE FROM %s WHERE id = %s"
-		% (tbrfeed.requestSessionTable, sqlResult[0])
-	)
-	
-	oauthToken = accessToken["oauth_token"]
-	oauthTokenSecret = accessToken["oauth_token_secret"]
-	
-	client = oauth2.Client(tbrfeed.oauthConsumer, oauth2.Token(key=oauthToken, secret=oauthTokenSecret))
-	resp, content = client.request("http://api.tumblr.com/v2/user/info", "POST")
-	
-	username = json.loads(content)["response"]["user"]["name"]
-	
-	digest = hashlib.sha1("TbrFeed " + username).hexdigest()
-	
-	c.execute("SELECT id FROM %s WHERE digest = %s"
-		% (tbrfeed.usersTable, db.literal(digest)))
-	
-	sqlResult = c.fetchone()
-	
-	if sqlResult is None:
-		c.execute("""
-			INSERT INTO %s(digest, oauth_token, oauth_token_secret, username, created, last_access)
-			VALUES(%s, %s, %s, %s, now(), now())
-		""" % (tbrfeed.usersTable, db.literal(digest), db.literal(oauthToken), db.literal(oauthTokenSecret), db.literal(username)))
-	else:
-		c.execute("""
-			UPDATE %s SET oauth_token = %s, oauth_token_secret = %s, last_access = now()
-			WHERE id = %s
-		""" % (tbrfeed.usersTable, db.literal(oauthToken), db.literal(oauthTokenSecret), sqlResult[0]))
-	
-	db.commit()
-	c.close()
-	db.close()
-	
-	sc = Cookie.SimpleCookie(os.environ.get("HTTP_COOKIE",""))
-	sc[tbrfeed.cookieKey] = digest
- 	sc[tbrfeed.cookieKey]["expires"] = (datetime.datetime.now() + datetime.timedelta(weeks=4)).strftime("%a, %d-%b-%Y %H:%M:%S GMT")
-	
-	print(sc.output())
+import session
+from tbrfeed import *
 
-print("Location: " + tbrfeed.location)
-print
+with session.Session() as sess:
+    query = dict(urlparse.parse_qsl(os.environ.get("QUERY_STRING", "")))
+
+    if "oauth_token" in query and "oauth_verifier" in query:
+        oauthToken = query["oauth_token"]
+        oauthVerifier = query["oauth_verifier"]
+
+        token = oauth2.Token(oauthToken, sess.data["request_secret"])
+        token.set_verifier(oauthVerifier)
+
+        client = oauth2.Client(oauthConsumer, token)
+    	resp, content = client.request("http://www.tumblr.com/oauth/access_token", "POST")
+    	accessToken = dict(urlparse.parse_qsl(content))
+
+        del sess.data["request_secret"]
+
+        oauthToken = accessToken["oauth_token"]
+    	oauthTokenSecret = accessToken["oauth_token_secret"]
+
+    	client = oauth2.Client(oauthConsumer, oauth2.Token(oauthToken, oauthTokenSecret))
+    	resp, content = client.request("http://api.tumblr.com/v2/user/info", "POST")
+
+    	username = json.loads(content)["response"]["user"]["name"]
+        id = hashlib.sha1(username + str(time.time()) + str(random.randint(0, 99999))).hexdigest()
+
+        db = MySQLdb.connect(user = dbName, passwd = dbPassword, db = dbName, charset = "utf8")
+        c = db.cursor()
+
+        c.execute("INSERT INTO %s (id, username, token, secret, created, lastaccess) VALUES (%s, %s, %s, %s, NOW(), NOW()) ON DUPLICATE KEY UPDATE token = %s, secret = %s, created = NOW(), lastaccess = NOW()"
+            % (usersTable, db.literal(id), db.literal(username), db.literal(oauthToken), db.literal(oauthTokenSecret), db.literal(oauthToken), db.literal(oauthTokenSecret)))
+
+        db.commit()
+
+        c.execute("SELECT id FROM %s WHERE username = %s" % (usersTable, db.literal(username)))
+        sqlResult = c.fetchone()
+        id = sqlResult[0]
+
+        c.close()
+        db.close()
+
+        sess.data["user"] = (id, username)
+
+    print sess.cookie
+    print("Location: " + location)
+    print "Content-Type: text/html; charset=utf-8"
+    print """
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="robots" content="noindex">
+        <title>TbrFeed</title>
+    </head>
+    <body>
+        <p><a href="%s">Back to TbrFeed</a></p>
+    </body>
+</html>
+""" % location

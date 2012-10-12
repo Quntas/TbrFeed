@@ -4,25 +4,35 @@
 import cgitb
 cgitb.enable()
 
-import tbrfeed
-import oauth2
 import urlparse
-import MySQLdb
 
-client = oauth2.Client(tbrfeed.oauthConsumer)
-resp, content = client.request("http://www.tumblr.com/oauth/request_token", "POST")
-token = dict(urlparse.parse_qsl(content))
+import oauth2
 
-db = MySQLdb.connect(user=tbrfeed.dbName, passwd=tbrfeed.dbPassword, db=tbrfeed.dbName, charset="utf8")
-c = db.cursor()
+import session
+from tbrfeed import *
 
-c.execute("INSERT INTO %s(oauth_token, oauth_token_secret, created) VALUES(%s, %s, now())"
-	% (tbrfeed.requestSessionTable, db.literal(token["oauth_token"]), db.literal(token["oauth_token_secret"]))
-)
+with session.Session() as sess:
+    client = oauth2.Client(oauthConsumer)
+    resp, content = client.request("http://www.tumblr.com/oauth/request_token", "POST")
+    token = dict(urlparse.parse_qsl(content))
 
-db.commit()
-c.close()
-db.close()
+    sess.data["request_secret"] = token["oauth_token_secret"]
 
-print("Location: http://www.tumblr.com/oauth/authorize?oauth_token=" + token["oauth_token"])
-print
+    uri = "http://www.tumblr.com/oauth/authorize?oauth_token=" + token["oauth_token"]
+
+    print "Status: 303 See Other"
+    print sess.cookie
+    print "Location: " + uri
+    print "Content-Type: text/html; charset=utf-8"
+    print """
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="robots" content="noindex">
+        <title>TbrFeed</title>
+    </head>
+    <body>
+        <p><a href="%s">Login in with Tumblr</a></p>
+    </body>
+</html>
+""" % uri

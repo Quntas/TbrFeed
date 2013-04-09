@@ -62,6 +62,12 @@ with session.Session() as sess:
             </div>
         </div>
 
+        <div id="ad_header">
+            <!-- admax -->
+            <script type="text/javascript" src="http://adm.shinobi.jp/s/bc7e9e110ea9a2775b96ded61dedf808"></script>
+            <!-- admax -->
+        </div>
+
         <div id="content" itemprop="mainContentOfPage" itemscope itemtype="http://schema.org/WebPageElement">""" + ("""
             <section>
                 <h2>フィード RSS2.0</h2>

@@ -44,6 +44,11 @@ body {
     margin-right: 10px;
 }
 
+#ad_header {
+    width: 540px;
+    margin: 10px auto 10px;
+}
+
 #content {
     width: 600px;
     margin: 0 auto;

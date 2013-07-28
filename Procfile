@@ -1,0 +1,1 @@
+web: gunicorn tbrfeed:app

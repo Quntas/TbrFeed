@@ -52,6 +52,21 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="LICENSE.txt">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Procfile">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="README.md">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="requirements.txt">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="runtime.txt">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="tbrfeed\templates\index.html">
       <Publish>True</Publish>
     </Content>

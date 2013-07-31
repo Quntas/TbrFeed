@@ -36,13 +36,25 @@
     </Interpreter>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="tumblr\" />
     <Folder Include="tbrfeed\" />
+    <Folder Include="tbrfeed\templates\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="tbrfeed\database.py" />
+    <Compile Include="tumblr\oauth.py" />
     <Compile Include="tbrfeed\__init__.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="__run__.py" />
+    <Compile Include="tumblr\__init__.py" />
+    <Compile Include="__run__.py">
+      <Publish>False</Publish>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="tbrfeed\templates\index.html">
+      <Publish>True</Publish>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
 </Project>

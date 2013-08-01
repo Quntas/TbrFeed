@@ -38,7 +38,7 @@ def index():
 @app.route("/authorize")
 def authorize():
     client = tumblr_client()
-    client.request_token()
+    client.request_token("http://%s/callback" % flask.request.headers.get("Host"))
     flask.session["request_secret"] = client.oauth_token_secret
     return flask.redirect(client.get_authorize_uri())
 

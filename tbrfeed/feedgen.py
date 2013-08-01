@@ -4,6 +4,8 @@ import xml.sax.saxutils
 
 import flask
 
+import tumblr
+
 def img_tag_from_photo(photo):
     alt_sizes = photo["alt_sizes"]
     alt_size = None
@@ -40,15 +42,24 @@ def create_description(post):
     return flask.render_template("feed_%s.html" % (post["type"],), post=post, img_tag_from_photo=img_tag_from_photo)
 
 def format_date(date_str):
-    match = re.match(r"^(\d{4})\-(\d{2})\-(\d{2}) (\d{2}):(\d{2}):(\d{2}) GMT$", date_str)
-    date = datetime.datetime(int(match.group(1)), int(match.group(2)), int(match.group(3)), int(match.group(4)), int(match.group(5)), int(match.group(6)))
-    return date.strftime("%a, %d %b %Y %H:%M:%S GMT")
+    return tumblr.parse_date(date_str).strftime("%a, %d %b %Y %H:%M:%S GMT")
 
-def generate_rss(username, type, posts):
+def generate_rss(uri, username, type, posts):
     return flask.render_template("rss.xml",
+        uri=uri,
         username=username,
         type=type,
         posts=posts,
         create_title=create_title,
         create_description=create_description,
-        format_date=format_date)
+        parse_date=tumblr.parse_date)
+
+def generate_atom(uri, username, type, posts):
+    return flask.render_template("atom.xml",
+        uri=uri,
+        username=username,
+        type=type,
+        posts=posts,
+        create_title=create_title,
+        create_description=create_description,
+        parse_date=tumblr.parse_date)

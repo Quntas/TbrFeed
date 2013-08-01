@@ -1,4 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-
+  <title type="text">{{ username }}'s Dashboard</title>
+  <link href="http://www.tumblr.com/dashboard" rel="alternate" />
+  <subtitle type="text">{{ type if type else 'all' }}</subtitle>
+  <generator uri="http://tbrfeed.azyobuzi.net/">TbrFeed</generator>
+  {% if posts %}<updated>{{ parse_date(posts[0]['date']).strftime('%Y-%m-%dT%H:%M:%SZ') }}</updated>{% endif %}
+  <id>{{ uri }}</id>
+  <link href="{{ uri }}" rel="self" type="application/atom+xml" />
+  {% for post in posts %}
+  <entry>
+    <title type="html">{{ create_title(post) }}</title>
+    <link href="{{ post['post_url'] }}" rel="alternate" />
+    <id>{{ post['post_url'] }}</id>
+    <content type="html">{{ create_description(post) }}</content>
+    <category term="{{ post['type'] }}" />
+    <author>
+      <name>{{ post['blog_name'] }}</name>
+      <uri>http://{{ post['blog_name'] }}.tumblr.com/</uri>
+    </author>
+    <published>{{ parse_date(post['date']).strftime('%Y-%m-%dT%H:%M:%SZ') }}</published>
+    <updated>{{ parse_date(post['date']).strftime('%Y-%m-%dT%H:%M:%SZ') }}</updated>
+  </entry>
+  {% endfor %}
 </feed>

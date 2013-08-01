@@ -1,4 +1,6 @@
+import datetime
 import json
+import re
 import urllib.parse
 import urllib.request
 
@@ -57,3 +59,7 @@ class Tumblr:
         if type: uri += "?type=" + urllib.parse.quote(type)
         response = self._http_request(uri)
         return json.loads(response.read().decode("utf-8"))["response"]["posts"]
+
+def parse_date(date_str):
+    match = re.match(r"^(\d{4})\-(\d{2})\-(\d{2}) (\d{2}):(\d{2}):(\d{2}) GMT$", date_str)
+    return datetime.datetime(int(match.group(1)), int(match.group(2)), int(match.group(3)), int(match.group(4)), int(match.group(5)), int(match.group(6)))

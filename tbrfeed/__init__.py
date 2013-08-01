@@ -77,4 +77,10 @@ def get_dashboard(id, type):
 @app.route("/feed/<id>/<type>.rss")
 def feed_rss(id, type):
     username, posts = get_dashboard(id, type)
-    return flask.Response(feedgen.generate_rss(username, type, posts), mimetype="application/rss+xml")
+    return flask.Response(feedgen.generate_rss(flask.request.url, username, type, posts), mimetype="application/rss+xml")
+
+@app.route("/feed/<id>.atom", defaults={"type": None})
+@app.route("/feed/<id>/<type>.atom")
+def feed_atom(id, type):
+    username, posts = get_dashboard(id, type)
+    return flask.Response(feedgen.generate_atom(flask.request.url, username, type, posts), mimetype="application/atom+xml")

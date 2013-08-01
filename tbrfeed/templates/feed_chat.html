@@ -1,2 +1,4 @@
-{{ post['body'] }}
+{% for line in post['body'].splitlines() %}
+{{ line }}<br />
+{% endfor %}
 {% if "source_url" in post %}<div><cite><a href="{{ post['source_url'] }}">{{ post['source_title'] }}</a></cite></div>{% endif %}

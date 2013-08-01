@@ -69,6 +69,12 @@ def logout():
     del flask.session["user_name"]
     return flask.redirect(flask.url_for("index"))
 
+@app.route("/suspend")
+def suspend():
+    with database.Connection() as cursor:
+        cursor.execute("DELETE FROM users WHERE id = %s", (flask.session["user_id"],))
+    return logout()
+
 def get_dashboard(id, type):
     with database.Connection() as cursor:
         cursor.execute("SELECT username, token, secret FROM users WHERE id = %s", (id,))

@@ -68,6 +68,7 @@
                     <ul class="nav navbar-nav pull-right">
                         <li class="navbar-text">{{ session['user_name'] }}</li>
                         <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                        <li><a href="javascript:deactive()">Deactive</a></li>
                     </ul>
                 </nav>
             </div>
@@ -254,6 +255,12 @@
                     $(".feed-detail", this.parentNode).slideToggle("fast");
                 });
             });
+
+            function deactive() {
+                if (confirm("あなたのフィード URI を無効にします。よろしいですか？")) {
+                    location.href = "{{ url_for('suspend') }}"
+                }
+            }
         </script>
     </body>
 </html>

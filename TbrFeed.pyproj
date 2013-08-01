@@ -77,7 +77,8 @@
     <Content Include="tbrfeed\templates\feed_quote.html" />
     <Content Include="tbrfeed\templates\feed_text.html" />
     <Content Include="tbrfeed\templates\feed_video.html" />
-    <Content Include="tbrfeed\templates\index.html">
+    <Content Include="tbrfeed\templates\loggedin.html" />
+    <Content Include="tbrfeed\templates\unlogin.html">
       <Publish>True</Publish>
     </Content>
     <Content Include="tbrfeed\templates\rss.xml" />

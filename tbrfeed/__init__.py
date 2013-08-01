@@ -27,7 +27,7 @@ def tumblr_client(oauth_token=None, oauth_token_secret=None):
 
 @app.route("/")
 def index():
-    return flask.render_template("index.html")
+    return flask.render_template("loggedin.html" if "user_id" in flask.session else "unlogin.html")
 
 @app.route("/authorize")
 def authorize():
@@ -45,6 +45,7 @@ def callback():
     oauth_token_secret = flask.session.get("request_secret")
     if not oauth_token_secret:
         flask.abort(403)
+    del flask.session["request_secret"]
 
     client = tumblr_client(oauth_token, oauth_token_secret)
     client.access_token(oauth_verifier)
@@ -60,6 +61,12 @@ def callback():
     flask.session["user_id"] = id
     flask.session["user_name"] = username
 
+    return flask.redirect(flask.url_for("index"))
+
+@app.route("/logout")
+def logout():
+    del flask.session["user_id"]
+    del flask.session["user_name"]
     return flask.redirect(flask.url_for("index"))
 
 def get_dashboard(id, type):

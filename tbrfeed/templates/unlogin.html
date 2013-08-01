@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8" />
+        <title>TbrFeed</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/css/bootstrap.min.css" rel="stylesheet" />
+        <meta name="keywords" content="Tumblr,フィード,RSS" />
+        <meta name="description" content="Tumblr のダッシュボードを RSS, Atom に変換するツール" />
+        <script type="text/javascript">
+
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-29400475-4']);
+            _gaq.push(['_trackPageview']);
+
+            (function () {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+
+        </script>
+        <style>
+            footer {
+                margin-top: 30px;
+            }
+            #copyright {
+                float: right;
+                text-align: right;
+            }
+            #share {
+                float: left;
+                margin: 0 0 20px;
+                padding: 0;
+            }
+                #share li {
+                    margin: 0;
+                    padding: 0;
+                    float: left;
+                    list-style: none;
+                }
+        </style>
+    </head>
+    <body>
+        <header class="navbar">
+            <div class="container">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{{ url_for('index') }}">TbrFeed</a>
+                <nav class="nav-collapse collapse navbar-responsive-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="{{ url_for('index') }}">Home</a></li>
+                        <li><a href="http://tbrfeed.tumblr.com/">Tumblr</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav pull-right">
+                        <li><a href="{{ url_for('authorize') }}">Login</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <div class="container">
+            <section class="jumbotron">
+                <h1>Tumblr の新しい使い方を開拓しよう</h1>
+                <p>TbrFeed は Tumblr のダッシュボードを RSS または Atom に変換するツールです。使い方は人それぞれ、新しい使い方を見つけましょう。</p>
+                <p><a class="btn btn-primary btn-large" href="{{ url_for('authorize') }}">今すぐログイン</a></p>
+            </section>
+
+            <div class="row">
+                <section class="col-lg-4">
+                    <h1>ログインについて</h1>
+                    <p>ログイン時に <q>アプリケーションのTumblrアカウント情報の読み取りと書き込みを許可しますか?</q> と表示されますが、 TbrFeed では書き込み操作を一切行いません。</p>
+                    <p>読み取り専用の権限にする方法を知っている方は、 azyobuzin までご連絡ください。よろしくお願いしします。</p>
+                </section>
+                <section class="col-lg-4">
+                    <h1>オープンソースプロジェクト</h1>
+                    <p>TbrFeed のソースコードは、 MIT License の下で公開されています。ぜひ、改善できる点がありましたらご協力よろしくお願いします。</p>
+                    <p><a href="https://github.com/azyobuzin/TbrFeed">GitHub azyobuzin/TbrFeed</a></p>
+                </section>
+                <section class="col-lg-4">
+                    <h1>コンタクト</h1>
+                    <p>TbrFeed に関するお問い合わせは、 Twitter @<a href="https://twitter.com/azyobuzin">azyobuzin</a> または<a href="http://tbrfeed.tumblr.com/contact">メールフォーム</a>で受け付けています。</p>
+                </section>
+            </div>
+
+            <footer>
+                <ul id="share">
+                    <li style="width:68px"><div class="g-plusone" data-size="medium" data-href="http://tbrfeed.azyobuzi.net/"></div></li>
+                    <li style="width:105px"><div class="fb-like" data-href="http://tbrfeed.azyobuzi.net/" data-width="450" data-layout="button_count" data-show-faces="false" data-send="false"></div></li>
+                    <li style="width:100px"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://tbrfeed.azyobuzi.net/" data-lang="ja" data-related="azyobuzin" data-hashtags="tbrfeed" data-dnt="true">ツイート</a></li>
+                </ul>
+                <div id="copyright">
+                    ©2012-2013 <a href="http://azyobuzi.net/">azyobuzin</a>, Special thanks <a href="http://yut.ifdef.jp/">yut831</a>
+                </div>
+            </footer>
+        </div>
+
+        <div id="fb-root"></div>
+        <script>
+            (function (d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s); js.id = id;
+                js.src = "//connect.facebook.net/ja_JP/all.js#xfbml=1";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));</script>
+        <script>!function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0]; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = "//platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); } }(document, "script", "twitter-wjs");</script>
+        <script type="text/javascript">
+            window.___gcfg = { lang: 'ja' };
+
+            (function () {
+                var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+                po.src = 'https://apis.google.com/js/plusone.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+            })();
+        </script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js"></script>
+    </body>
+</html>

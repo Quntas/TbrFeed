@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="tbrfeed\database.py" />
+    <Compile Include="tbrfeed\feedgen.py" />
     <Compile Include="tumblr\oauth.py" />
     <Compile Include="tbrfeed\__init__.py">
       <SubType>Code</SubType>
@@ -67,9 +68,19 @@
     <Content Include="runtime.txt">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="tbrfeed\templates\atom.xml" />
+    <Content Include="tbrfeed\templates\feed_answer.html" />
+    <Content Include="tbrfeed\templates\feed_audio.html" />
+    <Content Include="tbrfeed\templates\feed_chat.html" />
+    <Content Include="tbrfeed\templates\feed_link.html" />
+    <Content Include="tbrfeed\templates\feed_photo.html" />
+    <Content Include="tbrfeed\templates\feed_quote.html" />
+    <Content Include="tbrfeed\templates\feed_text.html" />
+    <Content Include="tbrfeed\templates\feed_video.html" />
     <Content Include="tbrfeed\templates\index.html">
       <Publish>True</Publish>
     </Content>
+    <Content Include="tbrfeed\templates\rss.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
 </Project>

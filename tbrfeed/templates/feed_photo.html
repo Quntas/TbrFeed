@@ -1,0 +1,9 @@
+<p>
+    {% if 'link_url' in post %}<a href="{{ post['link_url'] }}">{% endif %}
+    {% for photo in post["photos"] %}
+        {% autoescape false %}{{ img_tag_from_photo(photo) }}{% endautoescape %}
+    {% endfor %}
+    {% if "link_url" in post %}</a>{% endif %}
+    {% autoescape false %}{{ post['caption'] }}{% endautoescape %}
+    {% if "source_url" in post %}<div><cite><a href="{{ post['source_url'] }}">{{ post['source_title'] }}</a></cite></div>{% endif %}
+</p>

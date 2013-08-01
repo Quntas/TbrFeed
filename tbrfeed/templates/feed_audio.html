@@ -1,0 +1,5 @@
+{% autoescape false %}
+<div>{{ post['embed'] }}</div>
+<div>{{ post['caption'] }}</div>
+{% endautoescape %}
+{% if "source_url" in post %}<div><cite><a href="{{ post['source_url'] }}">{{ post['source_title'] }}</a></cite></div>{% endif %}

@@ -12,24 +12,18 @@ app.debug = True
 def before_request():
     flask.session.permanent = True
 
-
 import hashlib
 import random
 import time
 
-from tbrfeed import database
+from tbrfeed import database, feedgen
 import tumblr
 
-def get_consumer_key():
-    if flask.request.headers.get("Host") == "tbrfeed.azyobuzi.net":
-        return ("kQoBI75Uz8eWfmHSDVPNHWXu98I26Zg0q0jI8WvuZ52y68ZCYx", "3lDXj8P4C5UM6MP3b8HyWt7gY26Fu4vFKiBovoZl0Kjfp1Wixc")
-    else:
-        #Testing
-        return ("WJ4wsBIE9SsQ7URvKSLzj7WwBvUD2iSPdIixIxR7NmswplryKg", "UnNemW1cOkOYeb6VY6Kgih2bQgZLicTiCUQGsRH5ppaV8EKXY0")
-
 def tumblr_client(oauth_token=None, oauth_token_secret=None):
-    consumer_key, consumer_secret = get_consumer_key()
-    return tumblr.Tumblr(consumer_key, consumer_secret, oauth_token, oauth_token_secret)
+    return tumblr.Tumblr(
+        "kQoBI75Uz8eWfmHSDVPNHWXu98I26Zg0q0jI8WvuZ52y68ZCYx",
+        "3lDXj8P4C5UM6MP3b8HyWt7gY26Fu4vFKiBovoZl0Kjfp1Wixc",
+        oauth_token, oauth_token_secret)
 
 @app.route("/")
 def index():
@@ -67,3 +61,20 @@ def callback():
     flask.session["user_name"] = username
 
     return flask.redirect(flask.url_for("index"))
+
+def get_dashboard(id, type):
+    with database.Connection() as cursor:
+        cursor.execute("SELECT username, token, secret FROM users WHERE id = %s", (id,))
+        result = cursor.fetchone()
+        assert result
+        cursor.execute("SELECT update_lastaccess(%s)", (id,))
+    username, token, secret = result
+    return (username, tumblr_client(token, secret).user_dashboard(type=type))
+
+@app.route("/feed/<id>", defaults={"type": None})
+@app.route("/feed/<id>.rss", defaults={"type": None})
+@app.route("/feed/<id>/<type>")
+@app.route("/feed/<id>/<type>.rss")
+def feed_rss(id, type):
+    username, posts = get_dashboard(id, type)
+    return flask.Response(feedgen.generate_rss(username, type, posts), mimetype="application/rss+xml")

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <title>{{ username }}'s Dashboard</title>
+    <link>http://www.tumblr.com/dashboard</link>
+    <description>{{ type if type else 'all' }}</description>
+    <generator>TbrFeed</generator>
+    {% for post in posts %}
+    <item>
+      <title>{{ create_title(post) }}</title>
+      <link>{{ post['post_url'] }}</link>
+      <description>{{ create_description(post) }}</description>
+      <category>{{ post['type'] }}</category>
+      <author>{{ post['blog_name'] }}</author>
+      <pubDate>{{ format_date(post['date']) }}</pubDate>
+    </item>
+    {% endfor %}
+  </channel>
+</rss>

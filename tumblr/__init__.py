@@ -52,8 +52,8 @@ class Tumblr:
         response = self._http_request(self._api_endpoint + "user/info")
         return json.loads(response.read().decode("utf-8"))["response"]["user"]
 
-    def user_dashboard(self, limit=20, offset=0, type=None, since_id=0, reblog_info=False, notes_info=False):
-        uri = self._api_endpoint + "user/dashboard?limit=%s&offset=%s&type=%s&since_id=%s&reblog_info=%s&notes_info=%s" \
-            % (limit, offset, urllib.parse.quote(type) if type else "", since_id, reblog_info, notes_info)
+    def user_dashboard(self, type=None):
+        uri = self._api_endpoint + "user/dashboard"
+        if type: uri += "?type=" + urllib.parse.quote(type)
         response = self._http_request(uri)
         return json.loads(response.read().decode("utf-8"))["response"]["posts"]

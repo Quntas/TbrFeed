@@ -1,0 +1,5 @@
+{% autoescape false %}
+<blockquote>{{ post['text'] }}</blockquote>
+<div><cite>{{ post['source'] }}</cite></div>
+{% endautoescape %}
+{% if "source_url" in post %}<div><cite><a href="{{ post['source_url'] }}">{{ post['source_title'] }}</a></cite></div>{% endif %}

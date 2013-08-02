@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>{{ username }}'s Dashboard</title>
+    <link>http://www.tumblr.com/dashboard</link>
+    <description>{{ type if type else 'all' }}</description>
+    <generator>TbrFeed</generator>
+    <atom:link href="{{ uri }}" rel="self" type="application/rss+xml" />
+    {% for post in posts %}
+    <item>
+      <title>{{ create_title(post) }}</title>
+      <link>{{ post['post_url'] }}</link>
+      <guid>{{ post['post_url'] }}</guid>
+      <description>{{ create_description(post) }}</description>
+      <category>{{ post['type'] }}</category>
+      <author>{{ post['blog_name'] }}</author>
+      <pubDate>{{ parse_date(post['date']).strftime('%a, %d %b %Y %H:%M:%S GMT') }}</pubDate>
+    </item>
+    {% endfor %}
+  </channel>
+</rss>

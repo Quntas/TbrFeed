@@ -1,5 +1,0 @@
-<IfModule mod_rewrite.c>
-RewriteEngine On
-RewriteRule ^(.*feed)/([a-z0-9]+)(/$|$) $1.cgi?id=$2
-RewriteRule ^(.*feed)/([a-z0-9]+)/([a-z]+)(/$|$) $1.cgi?id=$2&type=$3
-</IfModule>

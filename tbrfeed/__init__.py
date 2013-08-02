@@ -21,8 +21,8 @@ import tumblr
 
 def tumblr_client(oauth_token=None, oauth_token_secret=None):
     return tumblr.Tumblr(
-        "kQoBI75Uz8eWfmHSDVPNHWXu98I26Zg0q0jI8WvuZ52y68ZCYx",
-        "3lDXj8P4C5UM6MP3b8HyWt7gY26Fu4vFKiBovoZl0Kjfp1Wixc",
+        os.environ.get("TBRFEED_CONSUMER_KEY"),
+        os.environ.get("TBRFEED_CONSUMER_SECRET"),
         oauth_token, oauth_token_secret)
 
 @app.route("/")

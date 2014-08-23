@@ -4,7 +4,7 @@
         <meta charset="utf-8" />
         <title>TbrFeed</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" />
         <meta name="keywords" content="Tumblr,フィード,RSS" />
         <meta name="description" content="Tumblr のダッシュボードを RSS, Atom に変換するツール" />
         <meta property="og:title" content="TbrFeed" />
@@ -61,7 +61,7 @@
                         <li><a href="http://tbrfeed.tumblr.com/">Tumblr</a></li>
                     </ul>
                     <ul class="nav navbar-nav pull-right">
-                        <li><a href="{{ url_for('authorize') }}">Login</a></li>
+                        <li><a href="{{ url_for('authorize') }}?csrf_token={{ csrf_token }}">Login</a></li>
                     </ul>
                 </nav>
             </div>
@@ -71,7 +71,7 @@
             <section class="jumbotron">
                 <h1>Tumblr の新しい使い方を開拓しよう</h1>
                 <p>TbrFeed は Tumblr のダッシュボードを RSS または Atom に変換するツールです。使い方は人それぞれ、新しい使い方を見つけましょう。</p>
-                <p><a class="btn btn-primary btn-large" href="{{ url_for('authorize') }}">今すぐログイン</a></p>
+                <p><a class="btn btn-primary btn-large" href="{{ url_for('authorize') }}?csrf_token={{ csrf_token }}">今すぐログイン</a></p>
             </section>
 
             <div class="row">
@@ -122,7 +122,7 @@
                 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
             })();
         </script>
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-        <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     </body>
 </html>

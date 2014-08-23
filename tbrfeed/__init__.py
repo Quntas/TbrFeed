@@ -7,6 +7,7 @@ import jinja2
 app = flask.Flask(__name__)
 app.jinja_loader = jinja2.FileSystemLoader(["tbrfeed/templates"])
 app.secret_key = os.environ.get("TBRFEED_SECRET_KEY")
+app.debug = True
 
 @app.before_request
 def before_request():
